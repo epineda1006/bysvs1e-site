@@ -193,7 +193,7 @@ const HomePage = ({ setPage }) => (
       <Swirl style={{ position: "absolute", bottom: 60, right: "12%" }} />
 
       <div style={{ position: "relative", zIndex: 1, maxWidth: 700, margin: "0 auto" }}>
-        <div style={{ marginBottom: 24 }}>
+        <div style={{ marginBottom: 24, display: "flex", justifyContent: "center" }}>
           <DomoSVG size={90} />
         </div>
         <h1 style={{
@@ -251,8 +251,9 @@ const HomePage = ({ setPage }) => (
         Every piece is handcrafted and unique — just like you ✨
       </p>
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
         gap: 20,
       }}>
         {[
@@ -271,6 +272,7 @@ const HomePage = ({ setPage }) => (
               padding: "32px 20px",
               transition: "all 0.3s ease",
               border: `1px solid ${PINK}60`,
+              width: 200, flexShrink: 0,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-4px)";
@@ -307,10 +309,9 @@ const HomePage = ({ setPage }) => (
     }}>
       <Stars count={6} />
       <div style={{ position: "relative", zIndex: 1 }}>
-        <DomoSVG size={50} />
         <h2 style={{
           fontFamily: "'Playfair Display', serif",
-          fontSize: 28, color: TEXT_DARK, margin: "16px 0 12px",
+          fontSize: 28, color: TEXT_DARK, margin: "0 0 12px",
         }}>
           Currently taking commissions!
         </h2>
@@ -363,9 +364,37 @@ const OrderPage = () => {
 
   const removeImage = (idx) => setImages((p) => p.filter((_, i) => i !== idx));
 
-  const handleSubmit = () => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
     if (!form.name || !form.productType) return;
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      const response = await fetch("https://formspree.io/f/xlgppaqy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          instagram: form.instagram,
+          productType: form.productType,
+          colors: form.colors,
+          charms: form.charms,
+          size: form.size,
+          budget: form.budget,
+          timeline: form.timeline,
+          description: form.description,
+          inspirationImages: images.map((img) => img.name).join(", ") || "None uploaded",
+        }),
+      });
+      if (response.ok) {
+        setSubmitted(true);
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+    }
+    setSubmitting(false);
   };
 
   const inputStyle = {
@@ -645,17 +674,19 @@ const OrderPage = () => {
 
           <button
             onClick={handleSubmit}
+            disabled={submitting || !form.name || !form.productType}
             style={{
               width: "100%", padding: "16px",
-              background: form.name && form.productType ? PINK_ACCENT : `${PINK_ACCENT}60`,
+              background: form.name && form.productType && !submitting ? PINK_ACCENT : `${PINK_ACCENT}60`,
               color: WHITE, border: "none", borderRadius: 16,
               fontFamily: "'DM Sans', sans-serif", fontSize: 16,
-              fontWeight: 600, cursor: form.name && form.productType ? "pointer" : "not-allowed",
+              fontWeight: 600, cursor: form.name && form.productType && !submitting ? "pointer" : "not-allowed",
               transition: "all 0.3s",
-              boxShadow: form.name && form.productType ? `0 4px 20px ${PINK_ACCENT}40` : "none",
+              boxShadow: form.name && form.productType && !submitting ? `0 4px 20px ${PINK_ACCENT}40` : "none",
+              opacity: submitting ? 0.7 : 1,
             }}
           >
-            Submit Order Request 🍓
+            {submitting ? "Sending... ✨" : "Submit Order Request 🍓"}
           </button>
 
           <p style={{
@@ -708,9 +739,9 @@ const ContactPage = () => {
           gap: 16, marginBottom: 48,
         }}>
           {[
-            { icon: "📧", label: "Email", value: "svs1e@email.com", sub: "I'll reply within 24hrs" },
-            { icon: "📱", label: "iMessage", value: "Text me!", sub: "For quick questions" },
-            { icon: "📸", label: "Instagram", value: "@svs1e_", sub: "DM me anytime", link: "https://instagram.com/by.svs1e" },
+            { icon: "📧", label: "Email", value: "by.svs1e@gmail.com", sub: "I'll reply within 24hrs" },
+            { icon: "📱", label: "iMessage", value: "(559) 892-3111", sub: "For quick questions" },
+            { icon: "📸", label: "Instagram", value: "@by.svs1e", sub: "DM me anytime", link: "https://instagram.com/by.svs1e" },
           ].map((c) => (
             <div
               key={c.label}
@@ -841,7 +872,7 @@ const Footer = () => (
         fontWeight: 600,
       }}
     >
-      @svs1e_ on Instagram →
+      @by.svs1e on Instagram →
     </a>
   </footer>
 );
