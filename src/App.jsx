@@ -89,8 +89,6 @@ const Nav = ({ page, setPage }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const links = [
     { id: "home", label: "Home" },
-    { id: "about", label: "About" },
-    { id: "gallery", label: "Gallery" },
     { id: "order", label: "Order" },
     { id: "contact", label: "Contact" },
   ];
@@ -231,33 +229,20 @@ const HomePage = ({ setPage }) => (
           >
             Place a Custom Order
           </button>
-          <button
-            onClick={() => setPage("gallery")}
-            style={{
-              background: WHITE, color: PINK_ACCENT,
-              border: `2px solid ${PINK_ACCENT}`, borderRadius: 28, padding: "12px 32px",
-              fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600,
-              cursor: "pointer", transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => e.target.style.transform = "translateY(-2px)"}
-            onMouseLeave={(e) => e.target.style.transform = "translateY(0)"}
-          >
-            View Gallery
-          </button>
         </div>
       </div>
     </section>
 
     {/* Product categories */}
     <section style={{
-      padding: "80px 24px", maxWidth: 900, margin: "0 auto",
+      padding: "80px 24px", maxWidth: 1000, margin: "0 auto",
       textAlign: "center",
     }}>
       <h2 style={{
         fontFamily: "'Playfair Display', serif",
         fontSize: 32, fontWeight: 700, color: TEXT_DARK, marginBottom: 12,
       }}>
-        What I Make
+        What I Make, With Love
       </h2>
       <p style={{
         fontFamily: "'DM Sans', sans-serif",
@@ -274,14 +259,16 @@ const HomePage = ({ setPage }) => (
           { name: "Bracelets", emoji: "📿", desc: "Beaded, charm & wire-wrapped styles" },
           { name: "Keychains", emoji: "🔑", desc: "Cute clips for bags & keys" },
           { name: "Phone Charms", emoji: "📱", desc: "Dangle charms for your phone" },
-          { name: "Custom", emoji: "✨", desc: "Your dream piece, made real" },
+          { name: "Sonny Angels", emoji: "👼", desc: "Adorable Sonny Angel themed pieces" },
+          { name: "Smiskis", emoji: "🌿", desc: "Cute Smiski-inspired charms & accessories" },
+          { name: "Calico Critters", emoji: "🐰", desc: "Charming Calico Critter creations" },
+          { name: "Have a Trinket at Home?", emoji: "🏠", desc: "Got a trinket you love? I can come to you and turn it into a custom keychain, charm, or accessory of your choice!" },
         ].map((item) => (
           <div
             key={item.name}
-            onClick={() => setPage("order")}
             style={{
               background: PINK_LIGHT, borderRadius: 20,
-              padding: "32px 20px", cursor: "pointer",
+              padding: "32px 20px",
               transition: "all 0.3s ease",
               border: `1px solid ${PINK}60`,
             }}
@@ -297,7 +284,7 @@ const HomePage = ({ setPage }) => (
             <div style={{ fontSize: 36, marginBottom: 12 }}>{item.emoji}</div>
             <h3 style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: 20, fontWeight: 700, color: TEXT_DARK, marginBottom: 8,
+              fontSize: 18, fontWeight: 700, color: TEXT_DARK, marginBottom: 8,
             }}>
               {item.name}
             </h3>
@@ -349,217 +336,7 @@ const HomePage = ({ setPage }) => (
   </div>
 );
 
-// ─── About Page ───
-const AboutPage = () => (
-  <div style={{ minHeight: "100vh", paddingTop: 64 }}>
-    <section style={{
-      maxWidth: 700, margin: "0 auto", padding: "80px 24px",
-    }}>
-      <div style={{ textAlign: "center", marginBottom: 48 }}>
-        <DomoSVG size={80} />
-        <h1 style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: 40, fontWeight: 700, color: TEXT_DARK,
-          margin: "20px 0 0",
-        }}>
-          About by.svs1e
-        </h1>
-      </div>
 
-      <div style={{
-        background: PINK_LIGHT, borderRadius: 24, padding: "40px 32px",
-        border: `1px solid ${PINK}50`, position: "relative", overflow: "hidden",
-      }}>
-        <Stars count={5} />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 17, color: TEXT_DARK, lineHeight: 1.8,
-            marginBottom: 20,
-          }}>
-            Hi, I'm Susie! 🍓
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 16, color: TEXT_MED, lineHeight: 1.8,
-            marginBottom: 20,
-          }}>
-            I'm a 20-year-old creator based in California's Central Valley, and I pour my heart into every piece I make. What started as a hobby has grown into something I truly love — designing and handcrafting custom jewelry and charms for amazing people like you.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 16, color: TEXT_MED, lineHeight: 1.8,
-            marginBottom: 20,
-          }}>
-            Each bracelet, keychain, and charm is carefully assembled by hand with quality materials. I believe accessories should be fun, personal, and made with love — that's the by.svs1e promise.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 16, color: TEXT_MED, lineHeight: 1.8,
-            marginBottom: 0,
-          }}>
-            Whether you have a specific vision or need help dreaming something up, I'm here to create something special just for you. Let's make it happen! 💕
-          </p>
-        </div>
-      </div>
-
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-        gap: 16, marginTop: 32,
-      }}>
-        {[
-          { label: "Handmade", icon: "🤲", text: "Every piece crafted by hand" },
-          { label: "Custom", icon: "✨", text: "Designed to your vision" },
-          { label: "Quality", icon: "💎", text: "Materials chosen with care" },
-        ].map((v) => (
-          <div key={v.label} style={{
-            background: WHITE, borderRadius: 16, padding: "24px 16px",
-            textAlign: "center", border: `1px solid ${PINK}40`,
-          }}>
-            <div style={{ fontSize: 28, marginBottom: 8 }}>{v.icon}</div>
-            <h3 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: 16, color: TEXT_DARK, marginBottom: 6,
-            }}>{v.label}</h3>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 12, color: TEXT_LIGHT, margin: 0, lineHeight: 1.5,
-            }}>{v.text}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  </div>
-);
-
-// ─── Gallery Page ───
-const GalleryPage = () => {
-  const placeholders = [
-    { id: 1, title: "Strawberry Heart Charm", category: "Keychain", color: "#e88ea0" },
-    { id: 2, title: "Berry Bead Bracelet", category: "Bracelet", color: "#8bc48a" },
-    { id: 3, title: "Star & Moon Chain", category: "Bracelet", color: "#a0b8d8" },
-    { id: 4, title: "Rose Garden Charm", category: "Phone Charm", color: "#d4748a" },
-    { id: 5, title: "Swirl Bead Set", category: "Bracelet", color: "#b8d4a0" },
-    { id: 6, title: "Domo Keychain", category: "Keychain", color: "#d4a868" },
-  ];
-
-  const [filter, setFilter] = useState("All");
-  const cats = ["All", "Bracelet", "Keychain", "Phone Charm"];
-  const filtered = filter === "All" ? placeholders : placeholders.filter((p) => p.category === filter);
-
-  return (
-    <div style={{ minHeight: "100vh", paddingTop: 64 }}>
-      <section style={{ maxWidth: 900, margin: "0 auto", padding: "80px 24px" }}>
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <h1 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: 40, fontWeight: 700, color: TEXT_DARK, marginBottom: 12,
-          }}>
-            Gallery
-          </h1>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            color: TEXT_MED, fontSize: 16,
-          }}>
-            A peek at some past creations 🍓
-          </p>
-        </div>
-
-        {/* Filter tabs */}
-        <div style={{
-          display: "flex", gap: 8, justifyContent: "center",
-          marginBottom: 36, flexWrap: "wrap",
-        }}>
-          {cats.map((c) => (
-            <button
-              key={c}
-              onClick={() => setFilter(c)}
-              style={{
-                background: filter === c ? PINK_ACCENT : PINK_LIGHT,
-                color: filter === c ? WHITE : TEXT_MED,
-                border: "none", borderRadius: 20, padding: "8px 20px",
-                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                fontWeight: 500, cursor: "pointer",
-                transition: "all 0.25s ease",
-              }}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-
-        {/* Gallery grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          gap: 20,
-        }}>
-          {filtered.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                borderRadius: 20, overflow: "hidden",
-                border: `1px solid ${PINK}40`,
-                transition: "all 0.3s ease",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow = `0 8px 30px ${PINK}40`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              {/* Placeholder image area */}
-              <div style={{
-                height: 220, background: `linear-gradient(135deg, ${item.color}30, ${item.color}60)`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                position: "relative",
-              }}>
-                <Stars count={3} />
-                <div style={{
-                  width: 70, height: 70, borderRadius: "50%",
-                  background: `${item.color}40`, display: "flex",
-                  alignItems: "center", justifyContent: "center",
-                  border: `2px dashed ${item.color}80`,
-                }}>
-                  <span style={{ fontSize: 11, color: TEXT_LIGHT, fontFamily: "'DM Sans', sans-serif" }}>
-                    Photo
-                  </span>
-                </div>
-              </div>
-              <div style={{ padding: "16px 20px", background: WHITE }}>
-                <span style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 11, color: PINK_ACCENT, fontWeight: 600,
-                  textTransform: "uppercase", letterSpacing: "0.05em",
-                }}>
-                  {item.category}
-                </span>
-                <h3 style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: 17, color: TEXT_DARK, margin: "4px 0 0",
-                }}>
-                  {item.title}
-                </h3>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p style={{
-          textAlign: "center", marginTop: 40,
-          fontFamily: "'DM Sans', sans-serif",
-          color: TEXT_LIGHT, fontSize: 14, fontStyle: "italic",
-        }}>
-          Replace these placeholders with your product photos!
-        </p>
-      </section>
-    </div>
-  );
-};
 
 // ─── Order Form Page ───
 const OrderPage = () => {
@@ -708,7 +485,7 @@ const OrderPage = () => {
           <div style={{ marginBottom: 16 }}>
             <label style={labelStyle}>Product Type *</label>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {["Bracelet", "Keychain", "Phone Charm", "Custom / Other"].map((t) => (
+              {["Bracelet", "Keychain", "Phone Charm", "Sonny Angels", "Smiskis", "Calico Critters", "Trinket at Home", "Custom / Other"].map((t) => (
                 <button
                   key={t}
                   onClick={() => setForm((p) => ({ ...p, productType: t }))}
@@ -1080,8 +857,6 @@ export default function App() {
   const renderPage = () => {
     switch (page) {
       case "home": return <HomePage setPage={setPage} />;
-      case "about": return <AboutPage />;
-      case "gallery": return <GalleryPage />;
       case "order": return <OrderPage />;
       case "contact": return <ContactPage />;
       default: return <HomePage setPage={setPage} />;
