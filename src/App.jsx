@@ -347,7 +347,7 @@ const HomePage = ({ setPage }) => (
 const OrderPage = () => {
   const [form, setForm] = useState({
     name: "", email: "", phone: "", instagram: "",
-    productType: "", colors: "", charms: "", size: "",
+    productType: [], colors: "", charms: "", size: "",
     description: "", budget: "", timeline: "",
   });
   const [images, setImages] = useState([]);
@@ -372,7 +372,7 @@ const OrderPage = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!form.name || !form.productType) return;
+    if (!form.name || form.productType.length === 0) return;
     setSubmitting(true);
     try {
       const formData = new FormData();
@@ -380,7 +380,7 @@ const OrderPage = () => {
       formData.append("email", form.email);
       formData.append("phone", form.phone);
       formData.append("instagram", form.instagram);
-      formData.append("productType", form.productType);
+      formData.append("productType", form.productType.join(", "));
       formData.append("colors", form.colors);
       formData.append("charms", form.charms);
       formData.append("size", form.size);
@@ -453,7 +453,7 @@ const OrderPage = () => {
             Thank you, {form.name}! I'll review your request and get back to you with a quote soon. Keep an eye on your DMs or email!
           </p>
           <button
-            onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", instagram: "", productType: "", colors: "", charms: "", size: "", description: "", budget: "", timeline: "" }); setImages([]); }}
+            onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", instagram: "", productType: [], colors: "", charms: "", size: "", description: "", budget: "", timeline: "" }); setImages([]); }}
             style={{
               marginTop: 24, background: PINK_ACCENT, color: WHITE,
               border: "none", borderRadius: 24, padding: "12px 32px",
@@ -529,16 +529,21 @@ const OrderPage = () => {
           </h3>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={labelStyle}>Product Type *</label>
+            <label style={labelStyle}>Product Type * (select all that apply)</label>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               {["Bracelet", "Keychain", "Phone Charm", "Sonny Angels", "Smiskis", "Calico Critters", "Lip Gloss Charm", "Trinket at Home", "Custom / Other"].map((t) => (
                 <button
                   key={t}
-                  onClick={() => setForm((p) => ({ ...p, productType: t }))}
+                  onClick={() => setForm((p) => ({
+                    ...p,
+                    productType: p.productType.includes(t)
+                      ? p.productType.filter((x) => x !== t)
+                      : [...p.productType, t],
+                  }))}
                   style={{
-                    background: form.productType === t ? PINK_ACCENT : WHITE,
-                    color: form.productType === t ? WHITE : TEXT_MED,
-                    border: `1.5px solid ${form.productType === t ? PINK_ACCENT : PINK}`,
+                    background: form.productType.includes(t) ? PINK_ACCENT : WHITE,
+                    color: form.productType.includes(t) ? WHITE : TEXT_MED,
+                    border: `1.5px solid ${form.productType.includes(t) ? PINK_ACCENT : PINK}`,
                     borderRadius: 20, padding: "8px 18px",
                     fontFamily: "'DM Sans', sans-serif", fontSize: 13,
                     fontWeight: 500, cursor: "pointer",
@@ -691,15 +696,15 @@ const OrderPage = () => {
 
           <button
             onClick={handleSubmit}
-            disabled={submitting || !form.name || !form.productType}
+            disabled={submitting || !form.name || form.productType.length === 0}
             style={{
               width: "100%", padding: "16px",
-              background: form.name && form.productType && !submitting ? PINK_ACCENT : `${PINK_ACCENT}60`,
+              background: form.name && form.productType.length > 0 && !submitting ? PINK_ACCENT : `${PINK_ACCENT}60`,
               color: WHITE, border: "none", borderRadius: 16,
               fontFamily: "'DM Sans', sans-serif", fontSize: 16,
-              fontWeight: 600, cursor: form.name && form.productType && !submitting ? "pointer" : "not-allowed",
+              fontWeight: 600, cursor: form.name && form.productType.length > 0 && !submitting ? "pointer" : "not-allowed",
               transition: "all 0.3s",
-              boxShadow: form.name && form.productType && !submitting ? `0 4px 20px ${PINK_ACCENT}40` : "none",
+              boxShadow: form.name && form.productType.length > 0 && !submitting ? `0 4px 20px ${PINK_ACCENT}40` : "none",
               opacity: submitting ? 0.7 : 1,
             }}
           >
