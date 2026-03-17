@@ -397,7 +397,10 @@ const OrderPage = () => {
       if (response.ok) {
         setSubmitted(true);
       } else {
-        alert("Something went wrong. Please try again or DM @by.svs1e on Instagram!");
+        const errorData = await response.json().catch(() => null);
+        const errorMsg = errorData?.errors?.map(e => e.message).join(", ") || "Unknown error";
+        console.error("Formspree error:", errorMsg, errorData);
+        alert("Error: " + errorMsg + "\n\nPlease try again or DM @by.svs1e on Instagram!");
       }
     } catch (error) {
       console.error("Form submission error:", error);
