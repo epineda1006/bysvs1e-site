@@ -262,8 +262,8 @@ const HomePage = ({ setPage }) => (
           { name: "Sonny Angels", emoji: "👼", desc: "Adorable themed pieces" },
           { name: "Smiskis", emoji: "🌿", desc: "Cute Smiski-inspired charms" },
           { name: "Calico Critters", emoji: "🐰", desc: "Charming critter creations" },
-          { name: "Your Own Trinket", emoji: "🏠", desc: "Bring a trinket you love & I'll make it a bracelet, keychain, or charm!" },
-          { name: "Lip Gloss Charms", emoji: "💋", desc: "Turn your lip gloss into a cute accessory!" },
+          { name: "Your Own Trinket", emoji: "🏠", desc: "Bring your trinket, I'll charm it!" },
+          { name: "Lip Gloss Charms", emoji: "💋", desc: "Glam up your lip gloss!" },
         ].map((item) => (
           <div
             key={item.name}
@@ -272,8 +272,9 @@ const HomePage = ({ setPage }) => (
               background: PINK_LIGHT, borderRadius: 28,
               padding: "16px 28px",
               border: `1px solid ${PINK}`,
-              display: "flex", alignItems: "center", gap: 12,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
               transition: "all 0.2s ease",
+              width: 280, flexShrink: 0,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
@@ -285,7 +286,7 @@ const HomePage = ({ setPage }) => (
             }}
           >
             <span className="pill-emoji" style={{ fontSize: 26, flexShrink: 0 }}>{item.emoji}</span>
-            <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
               <span className="pill-name" style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 16, fontWeight: 600, color: TEXT_DARK, lineHeight: 1.2,
@@ -926,6 +927,8 @@ export default function App() {
             padding: 8px 14px !important;
             border-radius: 20px !important;
             gap: 8px !important;
+            width: calc(50% - 4px) !important;
+            flex-shrink: 1 !important;
           }
           .pill-item .pill-emoji { font-size: 18px !important; }
           .pill-item .pill-name { font-size: 13px !important; }
