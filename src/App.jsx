@@ -384,18 +384,24 @@ const OrderPage = () => {
       formData.append("timeline", form.timeline);
       formData.append("description", form.description);
       images.forEach((img) => {
-        formData.append("attachment", img.file);
+        if (img.file) {
+          formData.append("attachment", img.file);
+        }
       });
 
       const response = await fetch("https://formspree.io/f/xlgppaqy", {
         method: "POST",
+        headers: { "Accept": "application/json" },
         body: formData,
       });
       if (response.ok) {
         setSubmitted(true);
+      } else {
+        alert("Something went wrong. Please try again or DM @by.svs1e on Instagram!");
       }
     } catch (error) {
       console.error("Form submission error:", error);
+      alert("Connection error. Please try again or DM @by.svs1e on Instagram!");
     }
     setSubmitting(false);
   };
