@@ -235,9 +235,10 @@ const HomePage = ({ setPage }) => (
 
     {/* Product categories */}
     <section style={{
-      padding: "80px 24px", maxWidth: 1000, margin: "0 auto",
-      textAlign: "center",
+      background: `radial-gradient(ellipse at center, ${WHITE} 30%, ${PINK_LIGHT} 70%, ${PINK}40 100%)`,
+      padding: "80px 24px",
     }}>
+    <div style={{ maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
       <h2 style={{
         fontFamily: "'Playfair Display', serif",
         fontSize: 32, fontWeight: 700, color: TEXT_DARK, marginBottom: 12,
@@ -250,7 +251,7 @@ const HomePage = ({ setPage }) => (
       }}>
         Every piece is handcrafted and unique — just like you ✨
       </p>
-      <div style={{
+      <div className="pill-container" style={{
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
@@ -268,6 +269,7 @@ const HomePage = ({ setPage }) => (
         ].map((item) => (
           <div
             key={item.name}
+            className="pill-item"
             style={{
               background: PINK_LIGHT, borderRadius: 28,
               padding: "16px 28px",
@@ -284,15 +286,15 @@ const HomePage = ({ setPage }) => (
               e.currentTarget.style.boxShadow = "none";
             }}
           >
-            <span style={{ fontSize: 26, flexShrink: 0 }}>{item.emoji}</span>
+            <span className="pill-emoji" style={{ fontSize: 26, flexShrink: 0 }}>{item.emoji}</span>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{
+              <span className="pill-name" style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 16, fontWeight: 600, color: TEXT_DARK, lineHeight: 1.2,
               }}>
                 {item.name}
               </span>
-              <span style={{
+              <span className="pill-desc" style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 13, color: TEXT_LIGHT, lineHeight: 1.3,
               }}>
@@ -302,11 +304,12 @@ const HomePage = ({ setPage }) => (
           </div>
         ))}
       </div>
+    </div>
     </section>
 
     {/* CTA Banner */}
     <section style={{
-      background: `linear-gradient(135deg, ${PINK} 0%, ${PINK_LIGHT} 100%)`,
+      background: `linear-gradient(180deg, ${PINK_LIGHT} 0%, ${PINK}80 50%, ${PINK_LIGHT} 100%)`,
       padding: "60px 24px", textAlign: "center",
       position: "relative", overflow: "hidden",
     }}>
@@ -920,6 +923,15 @@ export default function App() {
         @media (max-width: 640px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: block !important; }
+          .pill-container { gap: 8px !important; }
+          .pill-item {
+            padding: 8px 14px !important;
+            border-radius: 20px !important;
+            gap: 8px !important;
+          }
+          .pill-item .pill-emoji { font-size: 18px !important; }
+          .pill-item .pill-name { font-size: 13px !important; }
+          .pill-item .pill-desc { font-size: 10px !important; }
         }
         @media (min-width: 641px) {
           .mobile-dropdown { display: none !important; }
