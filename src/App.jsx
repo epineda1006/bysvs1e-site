@@ -246,7 +246,7 @@ const HomePage = ({ setPage }) => (
       </h2>
       <p style={{
         fontFamily: "'DM Sans', sans-serif",
-        color: TEXT_MED, marginBottom: 48, fontSize: 16,
+        color: TEXT_MED, marginBottom: 32, fontSize: 16,
       }}>
         Every piece is handcrafted and unique — just like you ✨
       </p>
@@ -254,48 +254,51 @@ const HomePage = ({ setPage }) => (
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
-        gap: 20,
+        gap: 14,
       }}>
         {[
-          { name: "Bracelets", emoji: "📿", desc: "Beaded, charm & wire-wrapped styles" },
+          { name: "Bracelets", emoji: "📿", desc: "Beaded, charm & wire-wrapped" },
           { name: "Keychains", emoji: "🔑", desc: "Cute clips for bags & keys" },
           { name: "Phone Charms", emoji: "📱", desc: "Dangle charms for your phone" },
-          { name: "Sonny Angels", emoji: "👼", desc: "Adorable Sonny Angel themed pieces" },
-          { name: "Smiskis", emoji: "🌿", desc: "Cute Smiski-inspired charms & accessories" },
-          { name: "Calico Critters", emoji: "🐰", desc: "Charming Calico Critter creations" },
-          { name: "Have a Trinket at Home?", emoji: "🏠", desc: "Got a trinket you love? I can come to you and turn it into a custom keychain, charm, or accessory of your choice!" },
+          { name: "Sonny Angels", emoji: "👼", desc: "Adorable themed pieces" },
+          { name: "Smiskis", emoji: "🌿", desc: "Cute Smiski-inspired charms" },
+          { name: "Calico Critters", emoji: "🐰", desc: "Charming critter creations" },
+          { name: "Your Own Trinket", emoji: "🏠", desc: "Bring a trinket you love & I'll make it a bracelet, keychain, or charm!" },
+          { name: "Lip Gloss Charms", emoji: "💋", desc: "Turn your lip gloss into a cute accessory!" },
         ].map((item) => (
           <div
             key={item.name}
             style={{
-              background: PINK_LIGHT, borderRadius: 20,
-              padding: "32px 20px",
-              transition: "all 0.3s ease",
-              border: `1px solid ${PINK}60`,
-              width: 200, flexShrink: 0,
+              background: PINK_LIGHT, borderRadius: 28,
+              padding: "16px 28px",
+              border: `1px solid ${PINK}`,
+              display: "flex", alignItems: "center", gap: 12,
+              transition: "all 0.2s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-4px)";
-              e.currentTarget.style.boxShadow = `0 8px 30px ${PINK}40`;
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 4px 15px ${PINK}40`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
               e.currentTarget.style.boxShadow = "none";
             }}
           >
-            <div style={{ fontSize: 36, marginBottom: 12 }}>{item.emoji}</div>
-            <h3 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: 18, fontWeight: 700, color: TEXT_DARK, marginBottom: 8,
-            }}>
-              {item.name}
-            </h3>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13, color: TEXT_MED, lineHeight: 1.5, margin: 0,
-            }}>
-              {item.desc}
-            </p>
+            <span style={{ fontSize: 26, flexShrink: 0 }}>{item.emoji}</span>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 16, fontWeight: 600, color: TEXT_DARK, lineHeight: 1.2,
+              }}>
+                {item.name}
+              </span>
+              <span style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 13, color: TEXT_LIGHT, lineHeight: 1.3,
+              }}>
+                {item.desc}
+              </span>
+            </div>
           </div>
         ))}
       </div>
@@ -526,7 +529,7 @@ const OrderPage = () => {
           <div style={{ marginBottom: 16 }}>
             <label style={labelStyle}>Product Type *</label>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {["Bracelet", "Keychain", "Phone Charm", "Sonny Angels", "Smiskis", "Calico Critters", "Trinket at Home", "Custom / Other"].map((t) => (
+              {["Bracelet", "Keychain", "Phone Charm", "Sonny Angels", "Smiskis", "Calico Critters", "Lip Gloss Charm", "Trinket at Home", "Custom / Other"].map((t) => (
                 <button
                   key={t}
                   onClick={() => setForm((p) => ({ ...p, productType: t }))}
@@ -860,7 +863,7 @@ const Footer = () => (
     background: PINK_LIGHT, padding: "32px 24px",
     textAlign: "center", borderTop: `1px solid ${PINK}40`,
   }}>
-    <DomoSVG size={32} />
+    <DomoSVG size={32} style={{ display: "block", margin: "0 auto" }} />
     <p style={{
       fontFamily: "'Playfair Display', serif",
       fontSize: 16, color: TEXT_DARK, margin: "10px 0 6px",
