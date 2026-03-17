@@ -181,11 +181,10 @@ const Nav = ({ page, setPage }) => {
 
 // ─── Home Page ───
 const HomePage = ({ setPage }) => (
-  <div style={{ minHeight: "100vh", paddingTop: 64 }}>
+  <div style={{ minHeight: "100vh", paddingTop: 64, background: `linear-gradient(180deg, ${PINK_LIGHT} 0%, ${WHITE} 20%, ${PINK_LIGHT} 45%, ${WHITE} 65%, ${PINK_LIGHT} 85%, ${PINK}50 100%)` }}>
     {/* Hero */}
     <section style={{
       position: "relative", overflow: "hidden",
-      background: `linear-gradient(170deg, ${PINK_LIGHT} 0%, ${WHITE} 40%, ${PINK_LIGHT} 100%)`,
       padding: "100px 24px 80px", textAlign: "center",
     }}>
       <Stars count={12} />
@@ -235,7 +234,6 @@ const HomePage = ({ setPage }) => (
 
     {/* Product categories */}
     <section style={{
-      background: `radial-gradient(ellipse at center, ${WHITE} 30%, ${PINK_LIGHT} 70%, ${PINK}40 100%)`,
       padding: "80px 24px",
     }}>
     <div style={{ maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
@@ -309,9 +307,8 @@ const HomePage = ({ setPage }) => (
 
     {/* CTA Banner */}
     <section style={{
-      background: `linear-gradient(180deg, ${PINK_LIGHT} 0%, ${PINK}80 50%, ${PINK_LIGHT} 100%)`,
       padding: "60px 24px", textAlign: "center",
-      position: "relative", overflow: "hidden",
+      position: "relative",
     }}>
       <Stars count={6} />
       <div style={{ position: "relative", zIndex: 1 }}>
@@ -435,6 +432,7 @@ const OrderPage = () => {
       <div style={{
         minHeight: "100vh", paddingTop: 64,
         display: "flex", alignItems: "center", justifyContent: "center",
+        background: `radial-gradient(ellipse at center, ${WHITE} 25%, ${PINK_LIGHT} 100%)`,
       }}>
         <div style={{
           textAlign: "center", padding: "60px 24px",
@@ -470,7 +468,7 @@ const OrderPage = () => {
   }
 
   return (
-    <div style={{ minHeight: "100vh", paddingTop: 64 }}>
+    <div style={{ minHeight: "100vh", paddingTop: 64, background: `radial-gradient(ellipse at center, ${WHITE} 25%, ${PINK_LIGHT} 100%)` }}>
       <section style={{ maxWidth: 640, margin: "0 auto", padding: "80px 24px" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <h1 style={{
@@ -734,7 +732,7 @@ const ContactPage = () => {
   const [openFaq, setOpenFaq] = useState(null);
 
   return (
-    <div style={{ minHeight: "100vh", paddingTop: 64 }}>
+    <div style={{ minHeight: "100vh", paddingTop: 64, background: `radial-gradient(ellipse at center, ${WHITE} 25%, ${PINK_LIGHT} 100%)` }}>
       <section style={{ maxWidth: 700, margin: "0 auto", padding: "80px 24px" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <h1 style={{
@@ -864,7 +862,7 @@ const ContactPage = () => {
 const Footer = () => (
   <footer style={{
     background: PINK_LIGHT, padding: "32px 24px",
-    textAlign: "center", borderTop: `1px solid ${PINK}40`,
+    textAlign: "center",
   }}>
     <DomoSVG size={32} style={{ display: "block", margin: "0 auto" }} />
     <p style={{
