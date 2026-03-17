@@ -358,6 +358,7 @@ const OrderPage = () => {
     const newImages = files.map((f) => ({
       name: f.name,
       url: URL.createObjectURL(f),
+      file: f,
     }));
     setImages((p) => [...p, ...newImages].slice(0, 5));
   };
@@ -370,23 +371,25 @@ const OrderPage = () => {
     if (!form.name || !form.productType) return;
     setSubmitting(true);
     try {
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("email", form.email);
+      formData.append("phone", form.phone);
+      formData.append("instagram", form.instagram);
+      formData.append("productType", form.productType);
+      formData.append("colors", form.colors);
+      formData.append("charms", form.charms);
+      formData.append("size", form.size);
+      formData.append("budget", form.budget);
+      formData.append("timeline", form.timeline);
+      formData.append("description", form.description);
+      images.forEach((img) => {
+        formData.append("attachment", img.file);
+      });
+
       const response = await fetch("https://formspree.io/f/xlgppaqy", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          instagram: form.instagram,
-          productType: form.productType,
-          colors: form.colors,
-          charms: form.charms,
-          size: form.size,
-          budget: form.budget,
-          timeline: form.timeline,
-          description: form.description,
-          inspirationImages: images.map((img) => img.name).join(", ") || "None uploaded",
-        }),
+        body: formData,
       });
       if (response.ok) {
         setSubmitted(true);
