@@ -346,7 +346,7 @@ const HomePage = ({ setPage }) => (
 // ─── Order Form Page ───
 const OrderPage = () => {
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", instagram: "",
+    name: "", email: "", phone: "", socialHandle: "", socialPlatform: "",
     productType: [],
     description: "", budget: "", timeline: "",
   });
@@ -394,14 +394,17 @@ const OrderPage = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!form.name || form.productType.length === 0) return;
+    if (!form.name || !form.phone || !form.socialHandle || !form.socialPlatform || form.productType.length === 0 || !form.budget || !form.timeline || !form.description) {
+      alert("Please fill out all required fields before submitting!");
+      return;
+    }
     setSubmitting(true);
     try {
       const formData = new FormData();
       formData.append("name", form.name);
       formData.append("email", form.email);
       formData.append("phone", form.phone);
-      formData.append("instagram", form.instagram);
+      formData.append("socialMedia", `${form.socialPlatform}: ${form.socialHandle}`);
       formData.append("productTypes", form.productType.join(", "));
 
       form.productType.forEach((type) => {
@@ -485,7 +488,7 @@ const OrderPage = () => {
             Thank you, {form.name}! I'll review your request and get back to you with a quote soon. Keep an eye on your DMs or email!
           </p>
           <button
-            onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", instagram: "", productType: [], description: "", budget: "", timeline: "" }); setProductDetails({}); setImages([]); }}
+            onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", socialHandle: "", socialPlatform: "", productType: [], description: "", budget: "", timeline: "" }); setProductDetails({}); setImages([]); }}
             style={{
               marginTop: 24, background: PINK_ACCENT, color: WHITE,
               border: "none", borderRadius: 24, padding: "12px 32px",
@@ -539,15 +542,32 @@ const OrderPage = () => {
               <input style={inputStyle} placeholder="you@email.com" type="email" value={form.email} onChange={handleChange("email")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }}>
-            <div>
-              <label style={labelStyle}>Phone</label>
-              <input style={inputStyle} placeholder="(555) 123-4567" value={form.phone} onChange={handleChange("phone")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Phone *</label>
+            <input style={inputStyle} placeholder="(555) 123-4567" value={form.phone} onChange={handleChange("phone")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+          </div>
+          <div style={{ marginBottom: 28 }}>
+            <label style={labelStyle}>Social Media @ *</label>
+            <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+              {["Instagram", "TikTok", "Snapchat", "Twitter/X", "Other"].map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setForm((prev) => ({ ...prev, socialPlatform: p }))}
+                  style={{
+                    background: form.socialPlatform === p ? PINK_ACCENT : WHITE,
+                    color: form.socialPlatform === p ? WHITE : TEXT_MED,
+                    border: `1.5px solid ${form.socialPlatform === p ? PINK_ACCENT : PINK}`,
+                    borderRadius: 20, padding: "6px 14px",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                    fontWeight: 500, cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {p}
+                </button>
+              ))}
             </div>
-            <div>
-              <label style={labelStyle}>Instagram @</label>
-              <input style={inputStyle} placeholder="@yourusername" value={form.instagram} onChange={handleChange("instagram")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
-            </div>
+            <input style={inputStyle} placeholder="@yourusername" value={form.socialHandle} onChange={handleChange("socialHandle")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
           </div>
 
           <div style={{ height: 1, background: `${PINK}60`, margin: "8px 0 28px" }} />
@@ -696,7 +716,7 @@ const OrderPage = () => {
 
           {/* Budget - always visible */}
           <div style={{ marginBottom: 16 }}>
-            <label style={labelStyle}>Budget Range</label>
+            <label style={labelStyle}>Budget Range *</label>
             <select
               style={{ ...inputStyle, cursor: "pointer" }}
               value={form.budget}
@@ -712,7 +732,7 @@ const OrderPage = () => {
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={labelStyle}>Timeline</label>
+            <label style={labelStyle}>Timeline *</label>
             <select
               style={{ ...inputStyle, cursor: "pointer" }}
               value={form.timeline}
@@ -727,7 +747,7 @@ const OrderPage = () => {
           </div>
 
           <div style={{ marginBottom: 20 }}>
-            <label style={labelStyle}>Describe Your Vision</label>
+            <label style={labelStyle}>Describe Your Vision *</label>
             <textarea
               style={{ ...inputStyle, minHeight: 100, resize: "vertical" }}
               placeholder="Tell me everything! Style, vibe, who it's for, any special details..."
@@ -816,22 +836,27 @@ const OrderPage = () => {
             )}
           </div>
 
-          <button
-            onClick={handleSubmit}
-            disabled={submitting || !form.name || form.productType.length === 0}
-            style={{
-              width: "100%", padding: "16px",
-              background: form.name && form.productType.length > 0 && !submitting ? PINK_ACCENT : `${PINK_ACCENT}60`,
-              color: WHITE, border: "none", borderRadius: 16,
-              fontFamily: "'DM Sans', sans-serif", fontSize: 16,
-              fontWeight: 600, cursor: form.name && form.productType.length > 0 && !submitting ? "pointer" : "not-allowed",
-              transition: "all 0.3s",
-              boxShadow: form.name && form.productType.length > 0 && !submitting ? `0 4px 20px ${PINK_ACCENT}40` : "none",
-              opacity: submitting ? 0.7 : 1,
-            }}
-          >
-            {submitting ? "Sending... ✨" : "Submit Order Request 🍓"}
-          </button>
+          {(() => {
+            const isReady = form.name && form.phone && form.socialHandle && form.socialPlatform && form.productType.length > 0 && form.budget && form.timeline && form.description && !submitting;
+            return (
+              <button
+                onClick={handleSubmit}
+                disabled={!isReady && !submitting}
+                style={{
+                  width: "100%", padding: "16px",
+                  background: isReady ? PINK_ACCENT : `${PINK_ACCENT}60`,
+                  color: WHITE, border: "none", borderRadius: 16,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 16,
+                  fontWeight: 600, cursor: isReady ? "pointer" : "not-allowed",
+                  transition: "all 0.3s",
+                  boxShadow: isReady ? `0 4px 20px ${PINK_ACCENT}40` : "none",
+                  opacity: submitting ? 0.7 : 1,
+                }}
+              >
+                {submitting ? "Sending... ✨" : "Submit Order Request 🍓"}
+              </button>
+            );
+          })()}
 
           <p style={{
             textAlign: "center", marginTop: 14,
