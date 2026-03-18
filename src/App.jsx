@@ -347,15 +347,37 @@ const HomePage = ({ setPage }) => (
 const OrderPage = () => {
   const [form, setForm] = useState({
     name: "", email: "", phone: "", instagram: "",
-    productType: [], colors: "", charms: "", size: "",
+    productType: [],
     description: "", budget: "", timeline: "",
   });
+  const [productDetails, setProductDetails] = useState({});
   const [images, setImages] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const fileRef = useRef(null);
 
   const handleChange = (field) => (e) =>
     setForm((p) => ({ ...p, [field]: e.target.value }));
+
+  const handleProductDetail = (product, field) => (e) =>
+    setProductDetails((p) => ({
+      ...p,
+      [product]: { ...(p[product] || {}), [field]: e.target.value },
+    }));
+
+  const handleHardware = (product, value) =>
+    setProductDetails((p) => ({
+      ...p,
+      [product]: { ...(p[product] || {}), hardware: value },
+    }));
+
+  const toggleProduct = (t) => {
+    setForm((p) => ({
+      ...p,
+      productType: p.productType.includes(t)
+        ? p.productType.filter((x) => x !== t)
+        : [...p.productType, t],
+    }));
+  };
 
   const handleImages = (e) => {
     const files = Array.from(e.target.files);
@@ -364,7 +386,7 @@ const OrderPage = () => {
       url: URL.createObjectURL(f),
       file: f,
     }));
-    setImages((p) => [...p, ...newImages].slice(0, 5));
+    setImages((p) => [...p, ...newImages].slice(0, 10));
   };
 
   const removeImage = (idx) => setImages((p) => p.filter((_, i) => i !== idx));
@@ -380,10 +402,20 @@ const OrderPage = () => {
       formData.append("email", form.email);
       formData.append("phone", form.phone);
       formData.append("instagram", form.instagram);
-      formData.append("productType", form.productType.join(", "));
-      formData.append("colors", form.colors);
-      formData.append("charms", form.charms);
-      formData.append("size", form.size);
+      formData.append("productTypes", form.productType.join(", "));
+
+      form.productType.forEach((type) => {
+        const d = productDetails[type] || {};
+        const prefix = `[${type}]`;
+        if (d.hardware) formData.append(`${prefix} Hardware`, d.hardware);
+        if (d.colors) formData.append(`${prefix} Colors`, d.colors);
+        if (d.charms) formData.append(`${prefix} Charms/Beads`, d.charms);
+        if (d.size) formData.append(`${prefix} Size`, d.size);
+        if (d.series) formData.append(`${prefix} Series/Type`, d.series);
+        if (d.trinketDesc) formData.append(`${prefix} Trinket Description`, d.trinketDesc);
+        if (d.customDesc) formData.append(`${prefix} Custom Description`, d.customDesc);
+      });
+
       formData.append("budget", form.budget);
       formData.append("timeline", form.timeline);
       formData.append("description", form.description);
@@ -453,7 +485,7 @@ const OrderPage = () => {
             Thank you, {form.name}! I'll review your request and get back to you with a quote soon. Keep an eye on your DMs or email!
           </p>
           <button
-            onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", instagram: "", productType: [], colors: "", charms: "", size: "", description: "", budget: "", timeline: "" }); setImages([]); }}
+            onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", instagram: "", productType: [], description: "", budget: "", timeline: "" }); setProductDetails({}); setImages([]); }}
             style={{
               marginTop: 24, background: PINK_ACCENT, color: WHITE,
               border: "none", borderRadius: 24, padding: "12px 32px",
@@ -534,12 +566,7 @@ const OrderPage = () => {
               {["Bracelet", "Keychain", "Phone Charm", "Sonny Angels", "Smiskis", "Calico Critters", "Lip Gloss Charm", "Trinket at Home", "Custom / Other"].map((t) => (
                 <button
                   key={t}
-                  onClick={() => setForm((p) => ({
-                    ...p,
-                    productType: p.productType.includes(t)
-                      ? p.productType.filter((x) => x !== t)
-                      : [...p.productType, t],
-                  }))}
+                  onClick={() => toggleProduct(t)}
                   style={{
                     background: form.productType.includes(t) ? PINK_ACCENT : WHITE,
                     color: form.productType.includes(t) ? WHITE : TEXT_MED,
@@ -556,37 +583,132 @@ const OrderPage = () => {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-            <div>
-              <label style={labelStyle}>Colors / Color Palette</label>
-              <input style={inputStyle} placeholder="e.g. red, green, silver" value={form.colors} onChange={handleChange("colors")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
-            </div>
-            <div>
-              <label style={labelStyle}>Specific Charms / Beads</label>
-              <input style={inputStyle} placeholder="e.g. strawberries, hearts, stars" value={form.charms} onChange={handleChange("charms")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
-            </div>
-          </div>
+          {/* Dynamic per-product sections */}
+          {form.productType.map((type) => {
+            const d = productDetails[type] || {};
+            const sectionStyle = {
+              background: `${WHITE}80`, borderRadius: 16, padding: "20px",
+              border: `1px solid ${PINK}60`, marginBottom: 16,
+            };
+            const sectionTitle = {
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 16, fontWeight: 700, color: PINK_ACCENT, marginBottom: 14, marginTop: 0,
+            };
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-            <div>
-              <label style={labelStyle}>Size (if applicable)</label>
-              <input style={inputStyle} placeholder="e.g. 7 inch wrist" value={form.size} onChange={handleChange("size")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
-            </div>
-            <div>
-              <label style={labelStyle}>Budget Range</label>
-              <select
-                style={{ ...inputStyle, cursor: "pointer" }}
-                value={form.budget}
-                onChange={handleChange("budget")}
-              >
-                <option value="">Select...</option>
-                <option value="under10">Under $10</option>
-                <option value="10-20">$10 - $20</option>
-                <option value="20-35">$20 - $35</option>
-                <option value="35plus">$35+</option>
-                <option value="flexible">Flexible</option>
-              </select>
-            </div>
+            return (
+              <div key={type} style={sectionStyle}>
+                <h4 style={sectionTitle}>{type}</h4>
+
+                {/* Hardware color - all products get this */}
+                <div style={{ marginBottom: 14 }}>
+                  <label style={labelStyle}>Hardware Color</label>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {["Silver", "Gold"].map((hw) => (
+                      <button
+                        key={hw}
+                        onClick={() => handleHardware(type, hw)}
+                        style={{
+                          background: d.hardware === hw ? PINK_ACCENT : WHITE,
+                          color: d.hardware === hw ? WHITE : TEXT_MED,
+                          border: `1.5px solid ${d.hardware === hw ? PINK_ACCENT : PINK}`,
+                          borderRadius: 20, padding: "8px 18px",
+                          fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                          fontWeight: 500, cursor: "pointer",
+                          transition: "all 0.2s",
+                        }}
+                      >
+                        {hw}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sonny Angels specific */}
+                {type === "Sonny Angels" && (
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={labelStyle}>What kind of Sonny Angel series are you looking for?</label>
+                    <input style={inputStyle} placeholder="e.g. Marine, Flower, Fruit..." value={d.series || ""} onChange={handleProductDetail(type, "series")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                )}
+
+                {/* Smiskis specific */}
+                {type === "Smiskis" && (
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={labelStyle}>What kind of Smiskis series are you looking for?</label>
+                    <input style={inputStyle} placeholder="e.g. Sneaking, Living, Bath..." value={d.series || ""} onChange={handleProductDetail(type, "series")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                )}
+
+                {/* Calico Critters specific */}
+                {type === "Calico Critters" && (
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={labelStyle}>What kind of Calico Critter are you looking for?</label>
+                    <input style={inputStyle} placeholder="e.g. Hopscotch Rabbit, Persian Cat..." value={d.series || ""} onChange={handleProductDetail(type, "series")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                )}
+
+                {/* Lip Gloss specific */}
+                {type === "Lip Gloss Charm" && (
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={labelStyle}>What kind of lip gloss are you looking for?</label>
+                    <input style={inputStyle} placeholder="e.g. ELF Squeeze Me, Glossier..." value={d.series || ""} onChange={handleProductDetail(type, "series")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                )}
+
+                {/* Trinket at Home specific */}
+                {type === "Trinket at Home" && (
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={labelStyle}>Describe your trinket (please include a photo in the inspiration images below!)</label>
+                    <textarea style={{ ...inputStyle, minHeight: 70, resize: "vertical" }} placeholder="Tell me about the trinket you want turned into a charm..." value={d.trinketDesc || ""} onChange={handleProductDetail(type, "trinketDesc")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                )}
+
+                {/* Custom / Other specific */}
+                {type === "Custom / Other" && (
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={labelStyle}>Describe what you want</label>
+                    <textarea style={{ ...inputStyle, minHeight: 70, resize: "vertical" }} placeholder="Tell me your idea..." value={d.customDesc || ""} onChange={handleProductDetail(type, "customDesc")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                )}
+
+                {/* Colors - all products */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: type === "Bracelet" ? 14 : 0 }}>
+                  <div>
+                    <label style={labelStyle}>Colors / Color Palette</label>
+                    <input style={inputStyle} placeholder="e.g. red, green, silver" value={d.colors || ""} onChange={handleProductDetail(type, "colors")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Specific Charms / Beads</label>
+                    <input style={inputStyle} placeholder="e.g. strawberries, hearts" value={d.charms || ""} onChange={handleProductDetail(type, "charms")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                </div>
+
+                {/* Size - only for Bracelet */}
+                {type === "Bracelet" && (
+                  <div>
+                    <label style={labelStyle}>Size (wrist measurement)</label>
+                    <input style={inputStyle} placeholder="e.g. 7 inch wrist" value={d.size || ""} onChange={handleProductDetail(type, "size")} onFocus={(e) => e.target.style.borderColor = PINK_ACCENT} onBlur={(e) => e.target.style.borderColor = `${PINK}80`} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Budget - always visible */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Budget Range</label>
+            <select
+              style={{ ...inputStyle, cursor: "pointer" }}
+              value={form.budget}
+              onChange={handleChange("budget")}
+            >
+              <option value="">Select...</option>
+              <option value="under10">Under $10</option>
+              <option value="10-20">$10 - $20</option>
+              <option value="20-35">$20 - $35</option>
+              <option value="35plus">$35+</option>
+              <option value="flexible">Flexible</option>
+            </select>
           </div>
 
           <div style={{ marginBottom: 16 }}>
@@ -618,7 +740,7 @@ const OrderPage = () => {
 
           {/* Image upload */}
           <div style={{ marginBottom: 28 }}>
-            <label style={labelStyle}>Inspiration Images (up to 5)</label>
+            <label style={labelStyle}>Inspiration Images (up to 10)</label>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 12, color: TEXT_LIGHT, margin: "0 0 12px",
@@ -649,7 +771,7 @@ const OrderPage = () => {
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 11, color: TEXT_LIGHT, margin: "4px 0 0",
               }}>
-                PNG, JPG, HEIC — max 5 images
+                PNG, JPG, HEIC — max 10 images
               </p>
               <input
                 ref={fileRef}
